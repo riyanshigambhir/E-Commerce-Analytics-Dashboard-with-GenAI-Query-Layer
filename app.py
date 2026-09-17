@@ -134,7 +134,7 @@ kpi_html = "<div class='kpi-row'>" + "".join(
 ) + "</div>"
 st.markdown(kpi_html, unsafe_allow_html=True)
 
-CHART_HEIGHT = 260
+CHART_HEIGHT = 300
 
 # ---------------------------------------------------------------------------
 # NL query box — right below the KPI cards, above the charts
@@ -146,24 +146,21 @@ with st.container(border=True):
     mode_label = "🟢 LLM mode (AI generates SQL)" if _llm_available() else "🟡 Fallback mode (no API key set — pattern-matched queries only)"
     st.caption(mode_label)
 
-    qcol1, qcol2 = st.columns([1, 1])
-    with qcol1:
-        example_questions = [
-            "What's our total revenue?",
-            "Which category has the highest return rate?",
-            "What are the top 5 best-selling products?",
-            "How does revenue break down by region?",
-            "How do VIP customers compare to regular customers?",
-            "Which category has the best average rating?",
-        ]
-        question = st.selectbox(
-            "Pick an example, or type your own below:",
-            options=["(type your own)"] + example_questions,
-        )
-    with qcol2:
-        typed = st.text_input(
-            "Your question:", value="" if question == "(type your own)" else question
-        )
+    example_questions = [
+        "What's our total revenue?",
+        "Which category has the highest return rate?",
+        "What are the top 5 best-selling products?",
+        "How does revenue break down by region?",
+        "How do VIP customers compare to regular customers?",
+        "Which category has the best average rating?",
+    ]
+    question = st.selectbox(
+        "Pick an example, or type your own below:",
+        options=["(type your own)"] + example_questions,
+    )
+    typed = st.text_input(
+        "Your question:", value="" if question == "(type your own)" else question
+    )
 
     ask_clicked = st.button("Ask")
 

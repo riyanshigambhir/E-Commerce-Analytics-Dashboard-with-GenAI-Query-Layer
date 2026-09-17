@@ -52,43 +52,47 @@ PLOTLY_TEMPLATE = go.layout.Template(
         xaxis=dict(gridcolor=GRID_LINE, zerolinecolor=GRID_LINE, color=TEXT_MUTED),
         yaxis=dict(gridcolor=GRID_LINE, zerolinecolor=GRID_LINE, color=TEXT_MUTED),
         legend=dict(font=dict(color=TEXT_PRIMARY)),
-        margin=dict(t=30, l=10, r=10, b=10),
+        margin=dict(t=30, l=50, r=20, b=30),
     )
 )
+# let Plotly expand margins automatically if a rotated axis title needs more room
+# (prevents axis titles like "revenue" / "return_rate_pct" from being clipped)
+PLOTLY_TEMPLATE.layout.xaxis.automargin = True
+PLOTLY_TEMPLATE.layout.yaxis.automargin = True
 
 LIGHT_FIELD = "#4a4380"
 LIGHT_FIELD_BORDER = "#6a60b0"
 
 CSS = f"""
 <style>
-.stApp {{
-    background-color: {BG_MAIN};
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+.main {{
+    background-color: {BG_MAIN} !important;
 }}
 
-/* tighten overall page padding so more content is visible without scrolling */
+/* generous page padding on all sides so the title isn't flush against
+   the edges of the browser/pane */
 .block-container {{
-    padding-top: 1.75rem !important;
-    padding-bottom: 1.5rem !important;
+    background-color: {BG_MAIN} !important;
+    padding-top: 3rem !important;
+    padding-bottom: 2.5rem !important;
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
 }}
 
-/* reduce vertical gap between stacked elements and between columns */
-div[data-testid="stVerticalBlock"] {{
-    gap: 0.6rem;
-}}
-div[data-testid="stHorizontalBlock"] {{
-    gap: 0.75rem;
-}}
-
-/* headers: less breathing room above/below */
-h1 {{ margin-bottom: 0.2rem !important; }}
-h3 {{ margin-top: 0 !important; margin-bottom: 0.3rem !important; padding: 0 !important; }}
+/* headers: a little tighter than Streamlit's default, but not cramped */
+h1 {{ margin-bottom: 0.6rem !important; }}
+h3 {{ margin-top: 0.2rem !important; margin-bottom: 0.6rem !important; }}
 
 /* KPI cards */
 .kpi-row {{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    margin-bottom: 4px;
+    margin-bottom: 28px;
 }}
 .kpi-card {{
     border-radius: 14px;
@@ -114,14 +118,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
 }}
 div[data-testid="stVerticalBlockBorderWrapper"] > div {{
     background-color: transparent;
-}}
-div[data-testid="stVerticalBlockBorderWrapper"] .block-container {{
-    padding: 0 !important;
-}}
-/* trim the default padding Streamlit adds inside a bordered container */
-div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlock"] {{
-    padding: 0.9rem 1.1rem;
-    gap: 0.4rem;
 }}
 
 /* lighter, clearly differentiated input fields against the dark panel */
